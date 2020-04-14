@@ -10,17 +10,54 @@ import Foundation
 //:
 //: The below example shows a protocol that requires conforming types have a particular property defined.
 
+protocol FullyNamed {
+    var fullName: String { get }
+}
+
+// adoption  and conformance
+
+// get and set  = read access and write acccess
+
+struct Person: FullyNamed {
+    var fullName: String
+    
+}
+
+class StarShip: FullyNamed {
+   
+    var prefix: String?
+    var name: String
+    init(name: String, prefix: String? = nil) {
+        self.name = name
+        self.prefix = prefix
+
+    }
+    
+    // computed property
+    var fullName: String {
+        
+        return (prefix != nil ? prefix! + " ": "") + self.name
+    }
+    
+}
+
+var ncc1701 = StarShip(name: "Enterprise", prefix: "USS")
+
+var firefly = StarShip(name: "Serenity")
+
+print(ncc1701.fullName)
+
+print(firefly.fullName)
+
+
+
+
+
 
 
 //: Protocols can also require that conforming types implement certain methods.
 
 
-
-//: Using built-in Protocols
-
-
-
-//: ## Protocols as Types
 
 
 protocol GeneratesRandomNumbers {
@@ -32,6 +69,33 @@ class  OneThroughTen: GeneratesRandomNumbers {
         return Int.random(in: 1...10)
     }
 }
+let rand = OneThroughTen()
+print (rand.random())
+
+
+//: Using built-in Protocols
+extension StarShip: Equatable {
+    static func == (lhs: StarShip, rhs: StarShip) -> Bool {
+        if lhs.fullName == rhs.fullName { return true }
+        else {return false }
+        }
+   
+}
+    if ncc1701 == firefly {
+    print("Same Starship")
+    }
+
+
+
+//: ## Protocols as Types
+
+
+
+
+
+
+
+
 
 class Dice {
     let sides: Int
@@ -45,8 +109,19 @@ class Dice {
 func roll() -> Int {
     return Int(generator.random() % sides) +  1
   
+    
+     // e.g. say dice has 6 sides, random gives 10  so 10 % 6 = 4 + 1 = 5
+     // 1 % 6  =   5  + 1 = 6    review mods   3 % 6 = 3 + 1 = 4   etc.
    }
 }
+
+var d6 = Dice(sides: 6, generator: OneThroughTen())
+for _ in 1...5 {
+    print (d6.roll())
+}
+
+
+
 
 protocol DiceGame {
     var dice: Dice { get }
