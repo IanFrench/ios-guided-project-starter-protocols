@@ -23,3 +23,45 @@ import Foundation
 //: ## Protocols as Types
 
 
+protocol GeneratesRandomNumbers {
+    func random() -> Int
+}
+
+class  OneThroughTen: GeneratesRandomNumbers {
+    func random() -> Int {
+        return Int.random(in: 1...10)
+    }
+}
+
+class Dice {
+    let sides: Int
+    let generator: GeneratesRandomNumbers
+    
+    init(sides: Int, generator: GeneratesRandomNumbers){
+    self.sides = sides
+    self.generator = generator
+    }
+
+func roll() -> Int {
+    return Int(generator.random() % sides) +  1
+  
+   }
+}
+
+protocol DiceGame {
+    var dice: Dice { get }
+    func play()
+}
+class Player {
+    var id: Int
+    var score: Int
+    var knockOutNumber: Int
+    var knockedOut: Bool
+
+    init (id: Int) {
+        self.id = id
+        self.knockOutNumber = Int.random (in: 6...9)
+        self.score = 0
+        self.knockedOut = false
+    }
+}
